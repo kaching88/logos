@@ -17,7 +17,9 @@ lazy val commonSettings = Seq(
   resolvers += Resolver.sonatypeRepo("snapshots"),
 
   addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full),
-  autoCompilerPlugins := true
+  autoCompilerPlugins := true,
+  fork in Test := true,
+  parallelExecution in Test := false
 )
 
 lazy val coreDependencies = libraryDependencies ++= Seq(
