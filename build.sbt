@@ -1,8 +1,6 @@
-import sbt.Keys._
-import sbt.{Resolver, _}
-
 lazy val commonSettings = Seq(
   organization := "com.github.kaching88",
+
   scalacOptions ++= Seq(
     "-feature",
     "-deprecation",
@@ -18,8 +16,41 @@ lazy val commonSettings = Seq(
 
   addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full),
   autoCompilerPlugins := true,
+
   fork in Test := true,
-  parallelExecution in Test := false
+  parallelExecution in Test := false ,
+
+  publishTo := {
+    val nexus = "https://oss.sonatype.org/"
+    if (isSnapshot.value)
+      Some("snapshots" at nexus + "content/repositories/snapshots")
+    else
+      Some("releases" at nexus + "service/local/staging/deploy/maven2")
+  },
+  publishMavenStyle := true,
+  pomIncludeRepository := { _ => false },
+  pomExtra :=
+    <url>https://github.com/kaching88/logos</url>
+    <licenses>
+      <license>
+        <name>MIT License</name>
+        <url>http://www.opensource.org/licenses/mit-license.php</url>
+      </license>
+    </licenses>
+    <scm>
+      <url>https://github.com/kaching88/logos</url>
+      <connection>https://github.com/kaching88/logos</connection>
+    </scm>
+    <developers>
+      <developer>
+        <id>kaching88</id>
+        <name>Bertrand Wlodarczyk</name>
+        <url>https://github.com/kaching88</url>
+      </developer>
+    </developers>,
+
+  releaseCrossBuild := true,
+  releasePublishArtifactsAction := PgpKeys.publishSigned.value
 )
 
 lazy val coreDependencies = libraryDependencies ++= Seq(
